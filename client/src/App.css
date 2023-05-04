@@ -83,3 +83,11 @@ button[type="submit"]:hover {
 input:invalid {
   border-color: #f44336;
 }
+
+input:valid {
+  border-color: #4caf50;
+}
+
+text-center {
+  text-align: center;
+}

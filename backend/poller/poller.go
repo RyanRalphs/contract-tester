@@ -26,12 +26,13 @@ func NewPoller(submission *submission.Submission, validator *validator.Validatio
 	}
 }
 
-func (p *Poller) Run() {
+func (p *Poller) Run() bool {
 	if p.Submission.Method == "GET" {
-		_, err := p.Get()
+		outcome, err := p.Get()
 		if err != nil {
-			panic(err)
+			return false
 		}
+		return outcome
 	}
 	if p.Submission.Method == "POST" {
 		p.Post()
@@ -42,6 +43,7 @@ func (p *Poller) Run() {
 	if p.Submission.Method == "DELETE" {
 		p.Delete()
 	}
+	return false
 }
 
 func (p *Poller) Get() (bool, error) {
@@ -63,6 +65,7 @@ func (p *Poller) Get() (bool, error) {
 	for key := range data {
 		match := strings.Contains(p.Submission.Expected, key)
 		fmt.Printf("Key: %s, Match: %t\n", key, match)
+		return match, nil
 	}
 	return match, nil
 }

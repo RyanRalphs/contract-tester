@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ApiData } from "./types";
 
 type Props = {
-  onSubmit: (apiData: ApiData) => void;
+  onSubmit: (apiData: ApiData) => boolean;
 };
 
 const Form: React.FC<Props> = ({ onSubmit }) => {
@@ -13,17 +13,32 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
     if (isValidUrl(url)) {
       if (payloadIsJson(payload)) {
-        const buildUp = { url, method, payload };
-        onSubmit(buildUp); 
         fetch("http://localhost:8080/api", {
           method: "POST",
           body: JSON.stringify({ url, method, payload }),
         })
           .then((response) => {
             if (response.status === 200) {
-              if (response.body) return response.status;
+                console.log(response)
+                const buildUp = { url, method, payload };
+                const exists = onSubmit(buildUp); 
+                if (exists) {
+                    setError("This API Route already exists in the table. Please enter a new API route.");
+                    setUrl("");
+                    return
+                }
+                setUrl("");
+                setMethod("");
+                setPayload("");
+                setError("That's a match!");
+            }
+            if (response.status === 400) {
+              setError("What you've submitted as expected is not a match. Please revise your expected payload and submit again.");
+              setPayload("");
+              return
             }
           })
           .then((data) => console.log(data));

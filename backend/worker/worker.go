@@ -15,7 +15,7 @@ func Run() {
 }
 
 func ContractTestSubmission(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("ContractTestSubmission")
+	fmt.Println("ContractTestSubmission ")
 
 	NewSubmission, err := submission.NewSubmission(w, r)
 
@@ -32,7 +32,14 @@ func ContractTestSubmission(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	NewPoller.Run()
+	isMatch := NewPoller.Run()
+
+	if !isMatch {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		http.Error(w, "Contract test failed", http.StatusBadRequest)
+		fmt.Println("Contract test failed")
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
