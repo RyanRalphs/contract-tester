@@ -14,6 +14,8 @@ const Table: React.FC<Props> = ({ data }) => {
           <th scope="col">API URL</th>
           <th scope="col">Method</th>
           <th scope="col">Expected Outcome</th>
+          <th scope="col">Last Run</th>
+          <th scope="col">Re-Test</th>
         </tr>
       </thead>
       <tbody>
@@ -22,6 +24,7 @@ const Table: React.FC<Props> = ({ data }) => {
             <td>{apiData.url}</td>
             <td>{apiData.method}</td>
             <td>{apiData.payload}</td>
+            <td>{apiData.outcome}</td>
           </tr>
         ))}
       </tbody>

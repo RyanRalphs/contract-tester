@@ -23,16 +23,13 @@ const Form: React.FC<Props> = ({ onSubmit }) => {
           .then((response) => {
             if (response.status === 200) {
                 console.log(response)
-                const buildUp = { url, method, payload };
+                const buildUp = { url, method, payload,outcome: "Passed!" };
                 const exists = onSubmit(buildUp); 
                 if (exists) {
                     setError("This API Route already exists in the table. Please enter a new API route.");
                     setUrl("");
                     return
                 }
-                setUrl("");
-                setMethod("");
-                setPayload("");
                 setError("That's a match!");
             }
             if (response.status === 400) {
